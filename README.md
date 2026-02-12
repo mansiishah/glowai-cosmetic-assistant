@@ -82,7 +82,7 @@ For production deployment, configure secrets in Streamlit Cloud.
 
 ## 🌍 Live Demo
 
-https://glowai-cosmetic-assistant-bootrun1a.streamlit.app/
+https://glowai-cosmetic-assistant-bootrun1b.streamlit.app/
 
 ---
 
