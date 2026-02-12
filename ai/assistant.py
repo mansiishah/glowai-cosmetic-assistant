@@ -11,12 +11,16 @@ def get_ai_response(user_input, filtered_products, chat_history):
     Be elegant, friendly, and helpful.
 
     Use ONLY the provided products.
-    Return STRICT JSON:
+
+    Return STRICT JSON in this format:
 
     {{
         "message": "response text",
-        "recommended_product_id": product_id_or_null
+        "recommended_product_ids": [list_of_product_ids_or_empty_list]
     }}
+
+    Do NOT include anything outside the JSON.
+    Do NOT add explanations before or after JSON.
 
     Products:
     {json.dumps(filtered_products, indent=2)}
@@ -29,7 +33,16 @@ def get_ai_response(user_input, filtered_products, chat_history):
             *chat_history,
             {"role": "user", "content": user_input}
         ],
-        temperature=0.3
+        temperature=0.2
     )
 
-    return json.loads(response.output_text)
+    raw_output = response.output_text.strip()
+
+    try:
+        return json.loads(raw_output)
+    except json.JSONDecodeError:
+        # Safe fallback
+        return {
+            "message": raw_output,
+            "recommended_product_ids": []
+        }
