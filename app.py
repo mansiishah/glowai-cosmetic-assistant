@@ -1,15 +1,18 @@
 import streamlit as st
 from dotenv import load_dotenv
 from data.products import products
-from utils.filter import filter_products
 from ai.assistant import get_ai_response
 
+# Load environment variables
 load_dotenv()
 
 st.set_page_config(page_title="GlowAI Cosmetic Assistant", page_icon="💄")
 st.title("💄 GlowAI Cosmetic Assistant")
 
-# Session state
+# ----------------------------
+# Initialize Session State
+# ----------------------------
+
 if "cart" not in st.session_state:
     st.session_state.cart = []
 
@@ -19,43 +22,54 @@ if "messages" not in st.session_state:
 if "recommended_product_ids" not in st.session_state:
     st.session_state.recommended_product_ids = []
 
-# Display chat history
+# ----------------------------
+# Display Chat History
+# ----------------------------
+
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
-# Chat input
+# ----------------------------
+# Chat Input
+# ----------------------------
+
 user_input = st.chat_input("Ask about our products...")
 
 if user_input:
 
+    # Save user message
     st.session_state.messages.append(
         {"role": "user", "content": user_input}
     )
 
-    filtered = filter_products(user_input, products)
-
+    # 🔥 Call RAG-powered assistant
     ai_response = get_ai_response(
         user_input,
-        filtered,
         st.session_state.messages
     )
 
     assistant_message = ai_response.get("message", "")
 
+    # Save assistant response
     st.session_state.messages.append(
         {"role": "assistant", "content": assistant_message}
     )
 
+    # Display assistant response
     with st.chat_message("assistant"):
         st.write(assistant_message)
 
+    # Save recommended product IDs
     st.session_state.recommended_product_ids = ai_response.get(
         "recommended_product_ids",
         []
     )
 
-# Add to cart buttons
+# ----------------------------
+# Add-to-Cart Buttons
+# ----------------------------
+
 for product_id in st.session_state.recommended_product_ids:
 
     product = next(
@@ -71,7 +85,10 @@ for product_id in st.session_state.recommended_product_ids:
             st.session_state.cart.append(product)
             st.success(f"Added {product['name']} to cart!")
 
-# Cart display
+# ----------------------------
+# Cart Section
+# ----------------------------
+
 st.subheader("🛒 Cart")
 
 total = 0
