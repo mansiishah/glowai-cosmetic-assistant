@@ -1,31 +1,37 @@
-# 💄 GlowAI Cosmetic Assistant
+# 💄 GlowAI - RAG Cosmetic Assistant
 
-An AI-powered cosmetic shop assistant built using OpenAI's GPT API and Streamlit.
+An AI-powered cosmetic shop assistant built using OpenAI, LangChain, FAISS, and Streamlit.
 
-This application demonstrates structured LLM outputs, modular architecture, conversational state management, and cloud deployment.
-
+This project demonstrates Retrieval-Augmented Generation (RAG) with semantic search and structured LLM outputs.
 ---
 
-## 🚀 Features
+## 🧠 What This Project Demonstrates
 
-- Conversational AI product assistant
-- Structured JSON responses from GPT
-- Smart product pre-filtering before LLM call
-- Add-to-cart simulation
-- Session-based memory
-- Modular project architecture
+- Retrieval-Augmented Generation (RAG)
+- Vector search with FAISS
+- Semantic product retrieval using embeddings
+- Structured JSON outputs from GPT
+- Conversational memory
+- Session state management
+- Modular Python architecture
 - Secure API key handling
-- Deployed via Streamlit Cloud
+- Cloud deployment via Streamlit
 
 ---
 
-## 🧠 Architecture Overview
+## 🏗 Architecture Overview
 
-User Input  
-→ Product Filtering (Python logic)  
-→ LLM Call (GPT-4o-mini with structured output)  
-→ Parsed JSON Response  
-→ Dynamic UI Rendering  
+User Query  
+↓  
+OpenAI Embeddings  
+↓  
+FAISS Vector Store (Semantic Search)  
+↓  
+Top-K Retrieved Products  
+↓  
+GPT-4o-mini (Structured Response)  
+↓  
+Streamlit UI + Cart Logic  
 
 ---
 
@@ -34,15 +40,16 @@ User Input
 glowai-cosmetic-assistant/
 │
 ├── app.py
-├── ai/
-│ └── assistant.py
-├── data/
-│ └── products.py
-├── utils/
-│ └── filter.py
-│
 ├── requirements.txt
-└── .gitignore
+│
+├── ai/
+│ ├── assistant.py # LLM interaction
+│ └── rag.py # Vector store + retrieval
+│
+├── data/
+│ └── products.py # Product catalog
+│
+└── .env
 
 
 ---
@@ -52,8 +59,9 @@ glowai-cosmetic-assistant/
 - Python
 - Streamlit
 - OpenAI GPT-4o-mini
-- Modular architecture
-- Cloud deployment
+- OpenAI Embeddings (text-embedding-3-small)
+- LangChain (v1 architecture)
+- FAISS Vector Store
 
 ---
 
